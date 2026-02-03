@@ -1,0 +1,2050 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Mirantis">
+      
+      
+      
+        <link rel="prev" href="../introduction/">
+      
+      
+        <link rel="next" href="../aio-installation-manual/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Installation on AWS - Rockoon Kubernetes OpenStack Operator</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Overpass:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Overpass";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#creating-a-trymosk-instance-using-the-amazon-ec2-console" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Rockoon Kubernetes OpenStack Operator" class="md-header__button md-logo" aria-label="Rockoon Kubernetes OpenStack Operator" data-md-component="logo">
+      
+  <img src="../../assets/mirantis-logo-inverted-horizontal-one-color.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Rockoon Kubernetes OpenStack Operator
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Installation on AWS
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/mirantis/rockoon" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Rockoon Kubernetes OpenStack Operator" class="md-nav__button md-logo" aria-label="Rockoon Kubernetes OpenStack Operator" data-md-component="logo">
+      
+  <img src="../../assets/mirantis-logo-inverted-horizontal-one-color.svg" alt="logo">
+
+    </a>
+    Rockoon Kubernetes OpenStack Operator
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/mirantis/rockoon" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rockoon Operator
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Rockoon Operator
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rockoon/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rockoon/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rockoon/custom-images/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Images
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/rockoon-admission/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rockoon Admission
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Resources
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Custom Resources
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/custom-resources/openstackdeployment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStackDeployment
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/custom-resources/openstackdeploymentstatus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    OpenStackDeploymentStatus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cloud Services
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Cloud Services
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/cloud_services/horizon/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Horizon
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/cloud_services/masakari/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Masakari
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Quick Start
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AIO Installation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AIO Installation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1_2" id="__nav_3_1_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TryMOSK (using pre-built image)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    TryMOSK (using pre-built image)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation on AWS
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation on AWS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-trymosk-instance-using-the-amazon-ec2-console" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating a TryMOSK Instance Using the Amazon EC2 Console
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-trymosk-instance-using-the-aws-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating a TryMOSK Instance Using the AWS CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-trymosk-on-an-aws-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting up TryMOSK on an AWS instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../aio-installation-manual/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manual install (Advanced)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access to AIO environment
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Access to AIO environment
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../vpn-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuring VPN
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../local-clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local clients configuration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Operations Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Operations Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/openstack/getting-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting access to OpenStack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/openstack/upgrade/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Upgrade OpenStack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/openstack/tempest/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run tempest
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instance HA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Instance HA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/openstack/masakari/masakari-configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configure OpenStack with Masakari
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user-guide/openstack/masakari/introspective-monitor/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introspective monitor test
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ops/openstack/troubleshoot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Troubleshoot
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-trymosk-instance-using-the-amazon-ec2-console" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating a TryMOSK Instance Using the Amazon EC2 Console
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-trymosk-instance-using-the-aws-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Creating a TryMOSK Instance Using the AWS CLI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-trymosk-on-an-aws-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting up TryMOSK on an AWS instance
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../introduction/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../introduction/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    AIO Installation
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="./" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    TryMOSK (using pre-built image)
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Installation on AWS</h1>
+
+<p>You can get a TryMOSK image from the <a href="https://binary.mirantis.com/?prefix=trymos/bin/">Mirantis CDN server</a>
+The latest image releases are located in folders with pefix <code>mosk-</code> in the name. You can also use a prepared
+AMI image on Amazon servers. This article describes the steps required to deploy TryMOSK from a prepared AMI
+image. At present time they are available on the <code>us-east-2</code> region.</p>
+<h2 id="creating-a-trymosk-instance-using-the-amazon-ec2-console">Creating a TryMOSK Instance Using the Amazon EC2 Console<a class="headerlink" href="#creating-a-trymosk-instance-using-the-amazon-ec2-console" title="Permanent link">#</a></h2>
+<p><strong>Step 1: Open the Amazon EC2 Console</strong></p>
+<ol>
+<li>Sign in to the AWS Management Console.</li>
+<li>Open the Amazon EC2 console at: <a href="https://console.aws.amazon.com/ec2/">https://console.aws.amazon.com/ec2/</a>.</li>
+</ol>
+<p><strong>Step 2: Select the AWS Region</strong></p>
+<ol>
+<li>In the navigation bar at the top-right, locate the <strong>Region selector</strong>.</li>
+<li>Select <strong>US East (Ohio)</strong>.
+   <img alt="Region" src="../../img/region.png" /></li>
+</ol>
+<p><strong>Step 3: Create a Security Group</strong></p>
+<ol>
+<li>In the left navigation pane, under <strong>Network &amp; Security</strong>, choose <strong>Security Groups</strong>.</li>
+<li>Click <strong>Create security group</strong>.</li>
+<li>In the <strong>Basic details</strong> section, provide:</li>
+<li><strong>Security group name</strong>: A descriptive name (for example: <code>trymosk-sg</code>).</li>
+<li><strong>Description</strong>: Purpose of the security group.</li>
+<li>In the <strong>Inbound rules</strong> section:</li>
+<li>Click <strong>Add rule</strong>.</li>
+<li>For <strong>Type</strong>, choose <strong>SSH</strong>.</li>
+<li>If you plan to use OpenVPN, click <strong>Add rule</strong> again, choose <strong>Custom UDP Rule</strong>, set <strong>Port range</strong> to <code>1194</code>, and <strong>Protocol</strong> to UDP.</li>
+<li>Click <strong>Create security group</strong>.
+   <img alt="Security Grops" src="../../img/sg.png" /></li>
+</ol>
+<p><strong>Step 4: Launch the TryMOSK instance</strong></p>
+<ol>
+<li>In the left navigation pane, choose <strong>Instances</strong>, then click <strong>Launch instances</strong>.</li>
+<li>Under <strong>Name and tags</strong>, set the <strong>Name</strong> (for example: <code>My TryMOSK</code>).</li>
+<li>Under <strong>Application and OS Images (Amazon Machine Image)</strong>:</li>
+<li>Type <code>trymosk</code> in the search box.</li>
+<li>Select the required image from the results.</li>
+<li>Under <strong>Instance type</strong>, choose <strong>t2.xlarge</strong> (or <strong>t2.2xlarge</strong> for better performance).</li>
+<li>Under <strong>Key pair (login)</strong>:</li>
+<li>Select an existing key pair, or</li>
+<li>Click <strong>Create new key pair</strong> to create one.</li>
+<li>Under <strong>Network settings</strong>, choose <strong>Select existing security group</strong> and select the one created in Step 3.</li>
+<li>Under <strong>Configure storage</strong>, set <strong>Root volume size</strong> to <strong>40 GB or more</strong>.</li>
+<li>Click <strong>Launch instance</strong>.
+   <img alt="EC2" src="../../img/ec2.png" /></li>
+</ol>
+<p><strong>Step 5: Get the instance’s Public IP address</strong></p>
+<ol>
+<li>Wait until the <strong>Instance state</strong> changes to <strong>Running</strong>.</li>
+<li>Select your instance and note the <strong>Public IPv4 address</strong> in the details panel.
+   <img alt="Public IP" src="../../img/public_ip.png" /></li>
+</ol>
+<p><strong>Step 6: Connect to the instance via SSH</strong></p>
+<ul>
+<li><strong>Linux/macOS</strong>:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>/path/to/private-key.pem<span class="w"> </span>ubuntu@&lt;PublicIPv4Address&gt;
+</code></pre></div>
+<ul>
+<li><strong>Windows (PuTTY)</strong>:</li>
+<li>Convert your <code>.pem</code> key to <code>.ppk</code> using PuTTYgen.</li>
+<li>Open PuTTY, enter the public IPv4 address, and load your <code>.ppk</code> key in <strong>Connection → SSH → Auth</strong>.</li>
+</ul>
+<h2 id="creating-a-trymosk-instance-using-the-aws-cli">Creating a TryMOSK Instance Using the AWS CLI<a class="headerlink" href="#creating-a-trymosk-instance-using-the-aws-cli" title="Permanent link">#</a></h2>
+<p>This procedure describes how to launch a TryMOSK EC2 instance using the AWS Command Line Interface (AWS CLI).</p>
+<p><strong>Step 1: Install the AWS CLI</strong></p>
+<p>Follow the installation instructions in the AWS CLI User Guide:
+ <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html">https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html</a></p>
+<p><strong>Step 2: Configure the AWS CLI</strong></p>
+<ol>
+<li>Follow the quick start configuration guide:
+    <a href="https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html">https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html</a></li>
+<li><strong>Important</strong>: Set the default AWS region to us-east-2 to ensure all operations are performed in the correct region:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>configure<span class="w"> </span><span class="nb">set</span><span class="w"> </span>region<span class="w"> </span>us-east-2
+</code></pre></div>
+<p><strong>Step 3: Create or import a Key Pair</strong></p>
+<p>You will use this key pair to connect to your EC2 instance via SSH.</p>
+<p><strong>Option A – Create a new key pair</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>create-key-pair<span class="w"> </span>--key-type<span class="w"> </span>rsa<span class="w"> </span>--key-name<span class="w"> </span>&lt;your-key-name&gt;<span class="w"> </span><span class="se">\</span>
+--query<span class="w"> </span><span class="s1">&#39;KeyMaterial&#39;</span><span class="w"> </span>--output<span class="w"> </span>text<span class="w"> </span>&gt;<span class="w"> </span>&lt;private-key-file&gt;.pem
+</code></pre></div>
+<p>Where:</p>
+<ul>
+<li><code>&lt;your-key-name&gt;</code> – unique key pair name (up to 255 ASCII characters).</li>
+<li><code>&lt;private-key-file&gt;</code> – file name for the private RSA key (keep it in a safe place).</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>create-key-pair<span class="w"> </span>--key-type<span class="w"> </span>rsa<span class="w"> </span>--key-name<span class="w"> </span>my-key-for-trymosk<span class="w"> </span><span class="se">\</span>
+--query<span class="w"> </span><span class="s1">&#39;KeyMaterial&#39;</span><span class="w"> </span>--output<span class="w"> </span>text<span class="w"> </span>&gt;<span class="w"> </span>my_private_key.pem
+</code></pre></div>
+<p><strong>Option B – Import an existing public key</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>import-key-pair<span class="w"> </span>--key-name<span class="w"> </span>&lt;your-key-name&gt;<span class="w"> </span><span class="se">\</span>
+--public-key-material<span class="w"> </span>fileb://&lt;public-key-file&gt;
+</code></pre></div>
+<p>Where:</p>
+<ul>
+<li><code>&lt;public-key-file&gt;</code> – path to the <code>.pub</code> public key file.</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>import-key-pair<span class="w"> </span>--key-name<span class="w"> </span>another-key-for-trymosk<span class="w"> </span><span class="se">\</span>
+--public-key-material<span class="w"> </span>fileb://home/ubuntu/test_rsa.pub<span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+<p>Example response:</p>
+<div class="highlight"><pre><span></span><code>b8:d6:be:72:9c:60:d8:b8:59:d9:00:ab:bd:9d:8c:f8 another-key-for-trymosk key-00d4cf79ad02dd1c5
+</code></pre></div>
+<p><strong>Step 4: Create a Security Group</strong></p>
+<p><strong>4.1. Find your default VPC ID</strong>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>describe-vpcs<span class="w"> </span>--query<span class="o">=</span><span class="s1">&#39;Vpcs[?IsDefault].VpcId&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+Example of response:
+<div class="highlight"><pre><span></span><code>  vpc-4744c62c
+</code></pre></div></p>
+<p><strong>4.2. Create the security group</strong>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>create-security-group<span class="w"> </span>--group-name<span class="w"> </span>&lt;your<span class="w"> </span>sg<span class="w"> </span>name&gt;<span class="w"> </span><span class="se">\</span>
+--description<span class="w"> </span><span class="s2">&quot;&lt;your sg description&gt;&quot;</span><span class="w"> </span>--vpc-id<span class="w"> </span>&lt;VPC<span class="w"> </span>Id&gt;<span class="w"> </span><span class="se">\</span>
+--query<span class="o">=</span><span class="s1">&#39;GroupId&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+Where:</p>
+<ul>
+<li><code>&lt;sg-name&gt;</code> – security group name (unique within VPC, up to 255 characters, cannot start with <code>sg-</code>).</li>
+<li><code>&lt;sg-description&gt;</code> – description of the security group.</li>
+<li><code>&lt;VPC-ID&gt;</code> – ID from step 4.1</li>
+</ul>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>create-security-group<span class="w"> </span>--group-name<span class="w"> </span>trymosk-security-group<span class="w"> </span><span class="se">\</span>
+--description<span class="w"> </span><span class="s2">&quot;Test security group for TryMOSK&quot;</span><span class="w"> </span>--vpc-id<span class="w"> </span>vpc-4744c62c<span class="w"> </span><span class="se">\</span>
+--query<span class="o">=</span><span class="s1">&#39;GroupId&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+Example of response:
+<div class="highlight"><pre><span></span><code>sg-0d72aa991587b5648
+</code></pre></div></p>
+<p><strong>4.3. Add inbound rules</strong>
+Allow SSH (port 22) and OpenVPN (port 1194 UDP):
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>authorize-security-group-ingress<span class="w"> </span>--group-id<span class="w"> </span>&lt;sg-id&gt;<span class="w"> </span>--protocol<span class="w"> </span>tcp<span class="w"> </span>--port<span class="w"> </span><span class="m">22</span><span class="w"> </span>--cidr<span class="w"> </span><span class="m">0</span>.0.0.0/0
+aws<span class="w"> </span>ec2<span class="w"> </span>authorize-security-group-ingress<span class="w"> </span>--group-id<span class="w"> </span>&lt;sg-id&gt;<span class="w"> </span>--protocol<span class="w"> </span>udp<span class="w"> </span>--port<span class="w"> </span><span class="m">1194</span><span class="w"> </span>--cidr<span class="w"> </span><span class="m">0</span>.0.0.0/0
+</code></pre></div>
+Where <code>&lt;sg-id&gt;</code> is from step 4.2.</p>
+<p><strong>Step 5: Find the TryMOSK AMI ID</strong></p>
+<div class="highlight"><pre><span></span><code>aws ec2 describe-images --filters Name=name,Values=&quot;trymosk*&quot; \
+--query=&#39;Images[*].[ImageId,Name,CreationDate]&#39; --output table
+</code></pre></div>
+<p>Example response:</p>
+<div class="highlight"><pre><span></span><code>--------------------------------------------------------------------------------------------------
+|                                         DescribeImages                                         |
++-----------------------+-------------------------------------------+----------------------------+
+|  ami-0504712c3ecb27331|  trymosk-jammy-amd64-25.1-20250723112122  |  2025-07-29T09:52:53.000Z  |
++-----------------------+-------------------------------------------+----------------------------+
+</code></pre></div>
+<p><strong>Step 6: Launch the TryMOSK instance</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>run-instances<span class="w"> </span>--image-id<span class="w"> </span>&lt;AMI<span class="w"> </span>Id&gt;<span class="w"> </span>--count<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+--instance-type<span class="w"> </span>t2.xlarge<span class="w"> </span><span class="se">\</span>
+--key-name<span class="w"> </span>&lt;rsa<span class="w"> </span>key<span class="w"> </span>pair<span class="w"> </span>name&gt;<span class="w"> </span><span class="se">\</span>
+--security-group-ids<span class="w"> </span>&lt;sg<span class="w"> </span>id&gt;<span class="w"> </span><span class="se">\</span>
+--associate-public-ip-address<span class="w"> </span><span class="se">\</span>
+--block-device-mapping<span class="w"> </span><span class="nv">DeviceName</span><span class="o">=</span>/dev/sda1,Ebs<span class="o">={</span><span class="nv">VolumeSize</span><span class="o">=</span>&lt;root<span class="w"> </span>volume<span class="w"> </span>size&gt;<span class="o">}</span><span class="w"> </span><span class="se">\</span>
+--query<span class="o">=</span><span class="s1">&#39;Instances[0].InstanceId&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+<p>Where:</p>
+<ul>
+<li><code>&lt;AMI-ID&gt;</code> – AMI ID from step 5.</li>
+<li><code>&lt;rsa-key-name&gt;</code> – key pair from step 3.</li>
+<li><code>&lt;sg-id&gt;</code> – security group from step 4.</li>
+<li><code>&lt;root-size&gt;</code> – root volume size (minimum 40 GB).</li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>run-instances<span class="w"> </span>--image-id<span class="w"> </span>ami-0504712c3ecb27331<span class="w"> </span>--count<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+--instance-type<span class="w"> </span>t2.xlarge<span class="w"> </span><span class="se">\</span>
+--key-name<span class="w"> </span>another-key-for-trymosk<span class="w"> </span><span class="se">\</span>
+--security-group-ids<span class="w"> </span>sg-0d72aa991587b5648<span class="w"> </span><span class="se">\</span>
+--associate-public-ip-address<span class="w"> </span><span class="se">\</span>
+--block-device-mapping<span class="w"> </span><span class="nv">DeviceName</span><span class="o">=</span>/dev/sda1,Ebs<span class="o">={</span><span class="nv">VolumeSize</span><span class="o">=</span><span class="m">40</span><span class="o">}</span><span class="w"> </span><span class="se">\</span>
+--query<span class="o">=</span><span class="s1">&#39;Instances[0].InstanceId&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+<p>Example of response:</p>
+<div class="highlight"><pre><span></span><code>i-0c8a0969dfd64c909
+</code></pre></div>
+<p><strong>Step 7: Wait for the instance to start</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>describe-instances<span class="w"> </span>--instance-ids<span class="w"> </span>&lt;your<span class="w"> </span>instance<span class="w"> </span>Id&gt;<span class="w"> </span><span class="se">\</span>
+--query<span class="o">=</span><span class="s1">&#39;Reservations[0].Instances[0].State.Name&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+<p>Where  <code>&lt;your instance Id&gt;</code> is from step 6.
+<strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>describe-instances<span class="w"> </span>--instance-ids<span class="w"> </span>i-0c8a0969dfd64c909<span class="w"> </span><span class="se">\</span>
+--query<span class="o">=</span><span class="s1">&#39;Reservations[0].Instances[0].State.Name&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+<p>Example of response:</p>
+<div class="highlight"><pre><span></span><code>pending
+</code></pre></div>
+<p><strong>Step 8: Get the public IPv4 address</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>describe-instances<span class="w"> </span>--instance-ids<span class="w"> </span>&lt;your<span class="w"> </span>instance<span class="w"> </span>Id&gt;<span class="w"> </span><span class="se">\</span>
+--query<span class="o">=</span><span class="s1">&#39;Reservations[0].Instances[0].PublicIpAddress&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+<p>Where <code>&lt;your instance Id&gt;</code> is from step 6.
+<strong>Example:</strong></p>
+<div class="highlight"><pre><span></span><code>aws<span class="w"> </span>ec2<span class="w"> </span>describe-instances<span class="w"> </span>--instance-ids<span class="w"> </span>i-0c8a0969dfd64c909<span class="w"> </span><span class="se">\</span>
+--query<span class="o">=</span><span class="s1">&#39;Reservations[0].Instances[0].PublicIpAddress&#39;</span><span class="w"> </span>--output<span class="w"> </span>text
+</code></pre></div>
+<p>Example of response:</p>
+<div class="highlight"><pre><span></span><code>18.218.29.107
+</code></pre></div>
+<p><strong>Step 9: Connect via SSH</strong></p>
+<p>From your local computer:</p>
+<ul>
+<li><strong>Linux/macOS</strong>:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>ssh<span class="w"> </span>-i<span class="w"> </span>/path/to/private-key.pem<span class="w"> </span>ubuntu@&lt;PublicIPv4Address&gt;
+</code></pre></div>
+<ul>
+<li><strong>Windows (PuTTY)</strong>:<ul>
+<li>Convert your <code>.pem</code> key to <code>.ppk</code> using PuTTYgen.</li>
+<li>Open PuTTY, enter the public IPv4 address, and load your <code>.ppk</code> key in <strong>Connection → SSH → Auth</strong>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="setting-up-trymosk-on-an-aws-instance">Setting up TryMOSK on an AWS instance<a class="headerlink" href="#setting-up-trymosk-on-an-aws-instance" title="Permanent link">#</a></h2>
+<p>This section explains how to set up TryMOSK on the EC2 instance created in the previous steps.</p>
+<p><strong>Step 1: Start the TryMOSK installation</strong></p>
+<p>The installation process takes approximately <strong>25 minutes</strong>. It will:</p>
+<ul>
+<li>Install and configure <strong>Kubernetes</strong> and <strong>Rockoon</strong> on the instance.</li>
+<li>Set up the <strong>OpenVPN server</strong>.</li>
+<li>Create the OpenVPN client configuration file.</li>
+</ul>
+<p>Run the following command to start the setup:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>screen<span class="w"> </span>-d<span class="w"> </span>-m<span class="w"> </span>/srv/trymosk/launch.sh
+</code></pre></div>
+<p>This runs the installation script inside a <strong>screen</strong> session, allowing it to continue even if your SSH connection is interrupted.</p>
+<p><strong>Step 2: Monitor the installation</strong></p>
+<p>You can view the installation log in real time:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/trymosk-install.log
+</code></pre></div>
+<p><strong>Step 3: Access TryMOSK after installation</strong></p>
+<p>When installation is complete, you can:</p>
+<ol>
+<li>Work with MOS directly via the console, <strong>or</strong></li>
+<li>Retrieve the OpenVPN client configuration file and set up a VPN connection from your local computer.</li>
+</ol>
+<p>Once connected via VPN, you can use:</p>
+<ul>
+<li><strong>Horizon</strong> (OpenStack web interface)</li>
+<li><strong>Mirantis Lens</strong></li>
+<li>Local <code>kubectl</code> commands to manage TryMOSK services.</li>
+</ul>
+<p><strong>Step 4: View system information and credentials</strong></p>
+<p>After installation, system details, OpenStack version, and admin credentials will be displayed as a <em>Message of the Day (MOTD)</em> upon SSH login.</p>
+<p>Example output:</p>
+<div class="highlight"><pre><span></span><code>OS_FAMILY:<span class="w"> </span>Debian
+OS_DISTRO:<span class="w"> </span>Ubuntu
+OS_DISTRO_VERSION:<span class="w"> </span><span class="m">22</span>.04
+OPENSTACK_VERSION:<span class="w"> </span>caracal
+ROCKOON_VERSION:<span class="w"> </span><span class="m">1</span>.0.11
+ADMIN_USERNAME:<span class="w"> </span>adminlpsdb63Gvn1
+ADMIN_PASSWORD:<span class="w"> </span>tLuQfuJVAxxxxxxxxxxxxx
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../introduction/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Introduction">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Introduction
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../aio-installation-manual/" class="md-footer__link md-footer__link--next" aria-label="Next: Manual install (Advanced)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Manual install (Advanced)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2005 - 2024 Mirantis, Inc. All rights reserved.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["toc.autohide", "search.suggest", "search.highlight", "navigation.tabs.sticky", "navigation.footer", "navigation.path", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
